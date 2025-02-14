@@ -1,8 +1,8 @@
 
 from typing import OrderedDict
 
-from fastapi import APIRouter, status, HTTPException, Depends
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, status, HTTPException, Depends # type: ignore
+from fastapi.responses import JSONResponse # type: ignore
 
 from api.db.schemas import Book, Genre, InMemoryDB
 
