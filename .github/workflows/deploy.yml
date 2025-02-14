@@ -1,30 +1,30 @@
 name: Deploy API
 
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches:
+      - main
 
 jobs:
-    deploy:
-        runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-        steps:
-          - name: Checkout Repository
-          - uses: actions/checkout@v3
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-          - name: Setup SSH Key
-            run: |
-             mkdir -p ~/.ssh
-             echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/FastApi-key.pem
-             chmod 600 ~/.ssh/FastApi-key.pem
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/FastApi-key.pem
+          chmod 600 ~/.ssh/FastApi-key.pem
 
-          - name: Deploy to EC2
-            run: |
-              ssh -o StrictHostKeyChecking-no -i ~/.ssh/FastApi-key.pem ubuntu@${{ secrets.EC2_PUBLIC_KEY }} << 'EOF'
-                cd /home/ubuntu/MubashirAO-fastapi-book-project
-                git pull origin main
-                source venv/bin/activate
-                pip install -r requirements.txt
-                systemctl restart fastapi
-              EOF
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/FastApi-key.pem ubuntu@${{ secrets.EC2_PUBLIC_KEY }} << 'EOF'
+            cd /home/ubuntu/MubashirAO-fastapi-book-project
+            git pull origin main
+            source venv/bin/activate
+            pip install -r requirements.txt
+            sudo systemctl restart fastapi
+          EOF
